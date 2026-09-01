@@ -132,7 +132,8 @@ soc-autograder/
 
 ---
 
-# 🛡️ 6. SOC CyberDefense Arena - Desafío Semestral
+Set-Content -Path README.md -Encoding UTF8 -Value @'
+# 🛡️ SOC CyberDefense Arena - Desafío Semestral
 ### Asignatura: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
 **Organización Evaluada:** NetChile Corp / Soluciones Tecnológicas SPA  
 **Coordinación:** Lead DevSecOps & Coordinación Académica de Ciberseguridad  
@@ -141,11 +142,11 @@ soc-autograder/
 
 ## 📌 1. Visión General del Desafío
 
-Bienvenido al repositorio oficial del desafío **SOC CyberDefense Arena**. En este proyecto semestral, cada equipo asumirá el rol de una célula operativa del **Centro de Operaciones de Seguridad (SOC / CSIRT)** encargada de proteger la infraestructura crítica de **NetChile Corp / Soluciones Tecnológicas SPA**.
+Bienvenido al repositorio oficial del desafío **SOC CyberDefense Arena**[cite: 1, 3]. En este proyecto semestral, cada equipo asumirá el rol de una célula operativa del **Centro de Operaciones de Seguridad (SOC / CSIRT)** encargada de proteger la infraestructura crítica de **NetChile Corp / Soluciones Tecnológicas SPA**[cite: 1, 2].
 
-La organización ha sido blanco de campañas avanzadas de ciberataques que combinan explotación de vulnerabilidades web (RCE), compromiso de cuentas de servicio, movimiento lateral con persistencia en servicios de Windows y exfiltración encubierta de datos a través de canales DNS/ICMP/HTTP.
+La organización ha sido blanco de campañas avanzadas de ciberataques que combinan explotación de vulnerabilidades web (RCE), compromiso de cuentas de servicio, movimiento lateral con persistencia en servicios de Windows y exfiltración encubierta de datos a través de canales DNS/ICMP/HTTP[cite: 1].
 
-El objetivo formativo es auditar, defender y responder ante los incidentes mediante tres misiones integrales que abarcan desde el análisis financiero cuantitativo del riesgo hasta la correlación de eventos en SIEM/NIDS y el análisis forense digital.
+El objetivo formativo es auditar, defender y responder ante los incidentes mediante tres misiones integrales que abarcan desde el análisis financiero cuantitativo del riesgo hasta la correlación de eventos en SIEM/NIDS y el análisis forense digital[cite: 1, 3].
 
 ---
 
@@ -156,5 +157,3 @@ graph LR
     A["Desafío Semestral<br>SOC CyberDefense Arena"] --> M1["Misión 1: GRC<br>Gestión Cuantitativa<br>SLE / ALE / CBA"]
     A --> M2["Misión 2: DFIR<br>Análisis Forense<br>Hashes / Event IDs / PCAP"]
     A --> M3["Misión 3: SOC & NIDS<br>Monitoreo Activo<br>Wazuh / Suricata eve.json"]
-
-El script procesará todos los archivos `.txt` en `entregas/`, generará la retroalimentación en consola y exportará la tabla final en `consolidado_notas.csv`.
