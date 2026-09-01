@@ -1,0 +1,123 @@
+================================================================================
+INFORME TÉCNICO DE CIBERSEGURIDAD DEFENSIVA Y OPERACIONES SOC
+ASIGNATURA: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
+EQUIPO EVALUADO: [Completar con Nombre del Equipo, ej: Equipo Delta - Blue Shield]
+INTEGRANTES: [Completar: Nombre Alumno 1, Nombre Alumno 2, Nombre Alumno 3]
+FECHA DE ENTREGA: [Completar: DD/MM/AAAA]
+EMPRESA AUDITADA: NetChile Corp / Soluciones Tecnológicas SPA
+================================================================================
+
+--------------------------------------------------------------------------------
+MISIÓN 1: GESTIÓN CUANTITATIVA DEL RIESGO DE CIBERSEGURIDAD (GRC)
+--------------------------------------------------------------------------------
+1.1 Identificación y Valoración de Activos Críticos:
+    - Activo Crítico Identificado: [Especificar nombre del activo, ej: Servidor Base de Datos Core / ERP Transaccional]
+    - Valor del Activo (Asset Value - AV): $[Indicar monto numérico, ej: 450,000] USD
+    - Amenaza Evaluada: [Definir vector de amenaza, ej: Ataque de Ransomware / Exfiltración masiva]
+
+1.2 Factor de Exposición y Pérdida Única Esperada (SLE):
+    - Factor de Exposición Inicial (Exposure Factor - EF): [Indicar %, ej: 0.40 o 40%]
+    - Fórmula: SLE = AV * EF
+    - Cálculo de SLE Inicial:
+      SLE = $[Monto AV] * [EF decimal] = $[Resultado SLE] USD
+
+1.3 Tasa Anual de Ocurrencia y Pérdida Anualizada Esperada (ALE Inicial):
+    - Tasa Anual de Ocurrencia Inicial (ARO): [Indicar frecuencia estimada, ej: 0.5 (1 evento cada 2 años)]
+    - Fórmula: ALE = SLE * ARO
+    - Cálculo de ALE Inicial:
+      ALE_inicial = $[Monto SLE] * [ARO decimal] = $[Resultado ALE_inicial] USD / año
+
+1.4 Propuesta de Salvaguarda y Mitigación:
+    - Controles de Seguridad Propuestos: [Especificar controles, ej: EDR + Segmentación Zero Trust + MFA FIDO2]
+    - Factor de Exposición Mitigado (EF_mitigado): [Indicar nuevo EF %, ej: 0.05 o 5%]
+    - ARO Mitigado (ARO_mitigado): [Indicar nuevo ARO %, ej: 0.10 o 1 evento cada 10 años]
+    - Cálculo de SLE Mitigado:
+      SLE_mitigado = AV * EF_mitigado = $[Resultado SLE_mitigado] USD
+    - Cálculo de ALE Mitigado:
+      ALE_mitigado = SLE_mitigado * ARO_mitigado = $[Resultado ALE_mitigado] USD / año
+    - Costo Anual del Control (Costo_Control): $[Indicar costo anual de licenciamiento/operación] USD / año
+
+1.5 Análisis Costo-Beneficio (CBA) y Retorno de Inversión en Seguridad (ROSI):
+    - Fórmula: CBA = (ALE_inicial - ALE_mitigado) - Costo_Control
+    - Sustitución y Cálculo Numérico:
+      CBA = ($[ALE_inicial] - $[ALE_mitigado]) - $[Costo_Control]
+      CBA = $[Beneficio Bruto] - $[Costo_Control] = $[Resultado CBA] USD / año
+    - Justificación Financiera: [Indicar si el CBA es positivo y por qué se recomienda la implementación a la junta directiva]
+
+--------------------------------------------------------------------------------
+MISIÓN 2: DFIR & ANÁLISIS FORENSE DIGITAL (INCIDENT RESPONSE)
+--------------------------------------------------------------------------------
+2.1 Identificación de Artefactos Maliciosos y Hashes Criptográficos:
+    - Nombre del Binario / Archivo Sospechoso: [ej: invoice_payload.exe / updater.exe]
+    - Ruta de Persistencia / Ubicación: [ej: C:\Windows\Temp\malware.exe]
+    - Hash Criptográfico SHA-256: [Completar con hash de 64 caracteres hexadecimales]
+      SHA-256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+    - Clasificación / Threat Intelligence: [ej: CobaltStrike Beacon / LockBit Loader]
+
+2.2 Análisis Forense de Windows Security Event IDs:
+    - Event ID 4624 (Successful Logon):
+      * Fecha/Hora (UTC): [AAAA-MM-DD HH:MM:SS]
+      * Logon Type: [Indicar Tipo: 2 (Interactive), 3 (Network), 10 (RemoteInteractive/RDP)]
+      * Cuenta de Usuario: [Indicar usuario comprometido]
+      * Dirección IP de Origen: [Indicar IP atacante]
+    - Event ID 4697 (A service was installed in the system):
+      * Fecha/Hora (UTC): [AAAA-MM-DD HH:MM:SS]
+      * Service Name: [Nombre del servicio malicioso]
+      * Service File Name: [Ruta y parámetros del binario ejecutado como servicio]
+      * Técnica MITRE ATT&CK: [T1543.003 - Create or Modify System Process: Windows Service]
+    - Event ID 4688 (A new process has been created):
+      * Proceso Creado: [Ruta del binario ejecutado]
+      * Proceso Padre: [Ruta del proceso padre]
+      * CommandLine: [Línea de comandos completa, ej: powershell.exe -ExecutionPolicy Bypass -NoProfile -EncodedCommand ...]
+
+2.3 Filtros de Inspección en Wireshark y tshark (Análisis PCAP):
+    - Filtro HTTP POST (Tráfico C2 / Exfiltración):
+      Sintaxis Wireshark/tshark: http.request.method == "POST" && ip.dst == [IP_C2]
+      Comando tshark: tshark -r captura.pcap -Y 'http.request.method == "POST"' -T fields -e frame.time -e ip.src -e ip.dst -e http.file_data
+      Hallazgo Forense: [Detallar datos exfiltrados o endpoints contactados]
+    - Filtro DNS (Consultas Anómalas / DGA / DNS Tunneling):
+      Sintaxis Wireshark/tshark: dns.flags.response == 0 && dns.qry.name matches ".*\\.dominio\\.xyz"
+      Comando tshark: tshark -r captura.pcap -Y 'dns.flags.response == 0' -T fields -e dns.qry.name
+      Hallazgo Forense: [Detallar registros TXT de alta entropía o dominios C2]
+    - Filtro ICMP (Túneles Encubiertos y Ping Beacons):
+      Sintaxis Wireshark/tshark: icmp.type == 8 && frame.len > 128
+      Comando tshark: tshark -r captura.pcap -Y 'icmp.type == 8 && data.len > 64' -T fields -e ip.src -e ip.dst -e data.text
+      Hallazgo Forense: [Detallar datos embebidos en el payload ICMP]
+
+2.4 Análisis Forense de Registros Linux en /var/log/auth.log:
+    - Evidencia de Ataque de Fuerza Bruta SSH:
+      [Pegar líneas de log con Failed password for ... indicando volumen e IP de origen]
+    - Evidencia de Acceso Exitoso Anómalo:
+      [Pegar líneas de log con Accepted password/publickey for ...]
+    - Evidencia de Escalamiento de Privilegios:
+      [Pegar eventos de sudo o cambio de usuario hacia root]
+
+--------------------------------------------------------------------------------
+MISIÓN 3: SOC & NIDS (DESPLIEGUE WAZUH SIEM Y SURICATA EVE.JSON)
+--------------------------------------------------------------------------------
+3.1 Despliegue y Configuración de Wazuh SIEM:
+    - Topología de Agentes y Servidor Manager:
+      * Wazuh Manager IP: [Indicar IP del servidor SIEM]
+      * Agentes Desplegados:
+        - Agente 001: [Hostname Linux / IP / Rol]
+        - Agente 002: [Hostname Windows Server / IP / Rol]
+    - Configuración de Monitoreo de Integridad de Archivos (FIM / syscheck):
+      [Detallar rutas monitoreadas, ej: /etc/passwd, /etc/shadow, C:\Windows\System32\drivers\etc\hosts]
+    - Regla de Detección Personalizada en local_rules.xml:
+      [Detallar ID de regla, nivel de severidad y condición de activación ante amenazas]
+
+3.2 Parseo y Análisis de Alertas NIDS en Suricata eve.json:
+    - Ubicación del fichero telemetría: /var/log/suricata/eve.json
+    - Detalle de la Alerta Crítica Identificada:
+      * Timestamp: [AAAA-MM-DDTHH:MM:SS.ffffff+0000]
+      * IP Origen y Puerto: [IP:Puerto] -> IP Destino y Puerto: [IP:Puerto]
+      * Signature Name: [Nombre exacto de la firma de detección, ej: ET EXPLOIT ...]
+      * Category: [Categoría de intrusión según Suricata]
+      * Severity Level: [Nivel de severidad, ej: 1 (High)]
+      * Payload / Exploit String: [Detallar cadena detectada, ej: CVE o inyección identificada]
+    - Correlación SIEM y Respuesta Activa (Active Response):
+      [Detallar cómo Wazuh correlacionó la alerta de Suricata y qué acción defensiva se disparó, ej: bloqueo en firewall]
+
+================================================================================
+FIN DEL INFORME TÉCNICO
+================================================================================

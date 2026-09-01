@@ -1,0 +1,5 @@
+Activo,Amenaza,AV_USD,EF_Inicial_%,SLE_Inicial_USD,ARO_Inicial,ALE_Inicial_USD,Control_Propuesto,Costo_Control_USD,EF_Mitigado_%,ARO_Mitigado,SLE_Mitigado_USD,ALE_Mitigado_USD,Beneficio_Neto_CBA_USD,ROSI_%,Estado_Decision
+Base de Datos Transaccional,Ransomware y Exfiltración,500000,40,200000,0.5,100000,EDR Administrado + WAF + MFA FIDO2,15000,5,0.1,25000,2500,82500,550.0,Aprobado (ROI Positivo)
+Servidor de Correo Corporativo,Phishing con Robo de Credenciales,150000,50,75000,1.0,75000,Secure Email Gateway Cloud + Sandbox,10000,10,0.2,15000,3000,62000,620.0,Aprobado (ROI Positivo)
+Controlador de Dominio Active Directory,Ataque Pass-the-Hash y Elevación Kerberos,300000,60,180000,0.3,54000,Microsegmentación Zero Trust + LAPS + PAM,12000,10,0.05,30000,1500,40500,337.5,Aprobado (ROI Positivo)
+[Completar: Servidor Web],Vulnerabilidad RCE / Inyección SQL,200000,30,60000,0.8,48000,[Completar: Control de Seguridad],8000,5,0.1,10000,1000,39000,487.5,[Completar: Estado]
