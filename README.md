@@ -132,9 +132,7 @@ soc-autograder/
 
 ---
 
-# 1. Actualizar el README.md con las instrucciones dirigidas al estudiante
-@'
-# 🛡️ SOC CyberDefense Arena - Desafío Semestral
+# 🛡️ 6. SOC CyberDefense Arena - Desafío Semestral
 ### Asignatura: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
 **Organización Evaluada:** NetChile Corp / Soluciones Tecnológicas SPA  
 **Coordinación:** Lead DevSecOps & Coordinación Académica de Ciberseguridad  
