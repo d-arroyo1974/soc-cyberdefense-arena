@@ -133,14 +133,14 @@ soc-autograder/
 ---
 
 Set-Content -Path README.md -Encoding UTF8 -Value @'
-# 🛡️ SOC CyberDefense Arena - Desafío Semestral
+# 🛡️ 6. SOC CyberDefense Arena - Desafío Semestral
 ### Asignatura: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
 **Organización Evaluada:** NetChile Corp / Soluciones Tecnológicas SPA  
 **Coordinación:** Lead DevSecOps & Coordinación Académica de Ciberseguridad  
 
 ---
 
-## 📌 1. Visión General del Desafío
+## 📌 6.1. Visión General del Desafío
 
 Bienvenido al repositorio oficial del desafío **SOC CyberDefense Arena**[cite: 1, 3]. En este proyecto semestral, cada equipo asumirá el rol de una célula operativa del **Centro de Operaciones de Seguridad (SOC / CSIRT)** encargada de proteger la infraestructura crítica de **NetChile Corp / Soluciones Tecnológicas SPA**[cite: 1, 2].
 
@@ -150,7 +150,7 @@ El objetivo formativo es auditar, defender y responder ante los incidentes media
 
 ---
 
-## 🎯 2. Desglose de las 3 Misiones Formativas
+## 🎯 6.2. Desglose de las 3 Misiones Formativas
 
 ```mermaid
 graph LR
