@@ -132,16 +132,31 @@ soc-autograder/
 
 ---
 
-## 💻 6. Instrucciones de Ejecución del Evaluador Automático
+# 1. Actualizar el README.md con las instrucciones dirigidas al estudiante
+@'
+# 🛡️ SOC CyberDefense Arena - Desafío Semestral
+### Asignatura: Ciberseguridad Defensiva (OCY1105 / CSY6122 / CSY1102)
+**Organización Evaluada:** NetChile Corp / Soluciones Tecnológicas SPA  
+**Coordinación:** Lead DevSecOps & Coordinación Académica de Ciberseguridad  
 
-Para ejecutar la corrección masiva de informes de los alumnos:
+---
 
-```powershell
-# 1. Configurar clave de API de Google Gemini (Opcional, cuenta con fallback determinístico)
-$env:GEMINI_API_KEY = "tu_api_key_aqui"
+## 📌 1. Visión General del Desafío
 
-# 2. Ejecutar el autograder
-python grader.py
-```
+Bienvenido al repositorio oficial del desafío **SOC CyberDefense Arena**. En este proyecto semestral, cada equipo asumirá el rol de una célula operativa del **Centro de Operaciones de Seguridad (SOC / CSIRT)** encargada de proteger la infraestructura crítica de **NetChile Corp / Soluciones Tecnológicas SPA**.
+
+La organización ha sido blanco de campañas avanzadas de ciberataques que combinan explotación de vulnerabilidades web (RCE), compromiso de cuentas de servicio, movimiento lateral con persistencia en servicios de Windows y exfiltración encubierta de datos a través de canales DNS/ICMP/HTTP.
+
+El objetivo formativo es auditar, defender y responder ante los incidentes mediante tres misiones integrales que abarcan desde el análisis financiero cuantitativo del riesgo hasta la correlación de eventos en SIEM/NIDS y el análisis forense digital.
+
+---
+
+## 🎯 2. Desglose de las 3 Misiones Formativas
+
+```mermaid
+graph LR
+    A["Desafío Semestral<br>SOC CyberDefense Arena"] --> M1["Misión 1: GRC<br>Gestión Cuantitativa<br>SLE / ALE / CBA"]
+    A --> M2["Misión 2: DFIR<br>Análisis Forense<br>Hashes / Event IDs / PCAP"]
+    A --> M3["Misión 3: SOC & NIDS<br>Monitoreo Activo<br>Wazuh / Suricata eve.json"]
 
 El script procesará todos los archivos `.txt` en `entregas/`, generará la retroalimentación en consola y exportará la tabla final en `consolidado_notas.csv`.
